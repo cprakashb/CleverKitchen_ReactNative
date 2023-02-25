@@ -1,10 +1,46 @@
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, SafeAreaView, TouchableOpacity, Text, View, Alert } from 'react-native';
 import commonStyles from "../styles/common";
+import { signInAsync } from '../services/api.service';
+
 
 export default function SignIn({ navigation }) {
     const [emailAddress, setEmailAddress] = useState("");
     const [password, setPassword] = useState("");
+    const [status, setStatus] = useState('');
+
+    const handlePressSignIn = async () => {
+        if (emailAddress.length <= 0) {
+            Alert.alert('Please enter a email address');
+            return;
+        }
+        if (password.length <= 0) {
+            Alert.alert('Please enter a password');
+            return;
+        }
+
+        setStatus('Authenticating ..');
+        signInAsync(emailAddress, password)
+            .then(userDetails => {
+                console.log('Login success!:', userDetails.user.uid);
+                navigation.reset({ index: 0, routes: [{ name: 'Tabs' }] })
+
+            })
+            .catch(error => {
+                if (error.code === 'auth/email-already-in-use') {
+                    console.log('That email address is already in use!');
+                    Alert.alert("Authentication Error", `Email address is already in use`)
+                }
+
+                if (error.code === 'auth/invalid-email') {
+                    console.log('That email address is invalid!');
+                    Alert.alert("Authentication Error", `Email address is invalid`)
+                }
+
+                console.error(error);
+                Alert.alert(`${error}`);
+            });
+    }
 
     return (
         <SafeAreaView style={commonStyles.container}>
@@ -26,14 +62,8 @@ export default function SignIn({ navigation }) {
                     secureTextEntry={true}
                 />
                 <View style={styles.buttonContainer} >
-                    <TouchableOpacity style={styles.button} onPress={() => {
-                        if (emailAddress.toLowerCase() === "admin" && password.toLowerCase() === "admin") {
-                            navigation.reset({ index:0, routes:[{name:'Tabs'}]})
-                        } else {
-                            Alert.alert("Authentication Error", `You are not authenticated to login`)
-                        }
-                    }} disabled={emailAddress && password ? false : true}>
-                        <Text style={styles.signInText}>Sign in</Text>
+                    <TouchableOpacity style={styles.button} onPress={handlePressSignIn}>
+                        <Text style={styles.signInText}>{status.length > 0 ? status : 'Sign in'}</Text>
                     </TouchableOpacity>
                     <Text style={styles.signup}>Not a user? Please
                         <Text style={styles.signupLink} onPress={() => { navigation.navigate('Sign Up') }}> Sign up </Text>
