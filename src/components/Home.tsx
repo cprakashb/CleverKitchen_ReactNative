@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, SafeAreaView, TouchableOpacity, Text, View, Alert } from 'react-native';
 import Header from './Header';
 import commonStyles from "../styles/common"
-export default function Home({ navigation }) {
+export default function Home(props: { navigation: any }) {
 
   return (
     <SafeAreaView style={commonStyles.container}>
@@ -13,19 +13,19 @@ export default function Home({ navigation }) {
         </View>
         <View style={styles.buttonContainer} >
           <TouchableOpacity style={[styles.button, styles.boxShadow]} onPress={() => {
-           navigation.navigate("Recipe Management")
+           props.navigation.navigate("Recipe Management")
           }}>
             <Text style={styles.buttonText}>Recipe Mangement</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.button, styles.boxShadow]} onPress={() => {
-           navigation.navigate("Inventory Management")
+           props.navigation.navigate("Inventory Management")
           }}>
             <Text style={styles.buttonText}>Inventory Mangement</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.teamContainer} >
           <TouchableOpacity style={[styles.button, styles.boxShadow]} onPress={() => {
-           navigation.navigate("Team")
+           props.navigation.navigate("Team")
           }}>
             <Text style={styles.buttonText}>Our Team</Text>
           </TouchableOpacity>

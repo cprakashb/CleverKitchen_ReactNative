@@ -3,6 +3,7 @@ export interface User {
   firstName?: string;
   lastName?: string;
   avatarUrl?: string;
+  emailId: string | null;
 }
 
 export interface AppData {

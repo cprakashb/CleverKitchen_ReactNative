@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, SafeAreaView, TouchableOpacity, Text, View, Alert } from 'react-native';
 import commonStyles from "../styles/common";
-import { signInAsync } from '../services/api.service';
+import { fetchUser, signInAsync } from '../services/api.service';
+import { useAppData } from '../providers/AppState';
+import { User } from '../common/types';
 
 
-export default function SignIn({ navigation }) {
+export default function SignIn(props: { navigation: any }) {
     const [emailAddress, setEmailAddress] = useState("");
     const [password, setPassword] = useState("");
     const [status, setStatus] = useState('');
+    const { setActiveUser } = useAppData();
 
     const handlePressSignIn = async () => {
         if (emailAddress.length <= 0) {
@@ -22,11 +25,11 @@ export default function SignIn({ navigation }) {
         setStatus('Authenticating ..');
         signInAsync(emailAddress, password)
             .then(userDetails => {
-                console.log('Login success!:', userDetails.user.uid);
-                navigation.reset({ index: 0, routes: [{ name: 'Tabs' }] })
-
+                let currentUser = { id: userDetails.user.uid, emailId: userDetails.user.email }
+                loadUserProfile(currentUser)
             })
             .catch(error => {
+                setStatus('')
                 if (error.code === 'auth/email-already-in-use') {
                     console.log('That email address is already in use!');
                     Alert.alert("Authentication Error", `Email address is already in use`)
@@ -42,6 +45,18 @@ export default function SignIn({ navigation }) {
             });
     }
 
+    async function loadUserProfile(userDetails: User) {
+        console.log('Loading user profile...');
+        const loadedUser = await fetchUser(userDetails);
+        if (!loadedUser) {
+            Alert.alert('Something went wrong');
+            return;
+        }
+        setActiveUser(loadedUser);
+        props.navigation.reset({ index: 0, routes: [{ name: 'Tabs' }] })
+        setStatus('');
+    }
+
     return (
         <SafeAreaView style={commonStyles.container}>
             <View style={styles.bodyContainer}>
@@ -49,7 +64,7 @@ export default function SignIn({ navigation }) {
                 <TextInput
                     style={styles.input}
                     onChangeText={setEmailAddress}
-                    value={emailAddress}
+                    value={emailAddress.toLowerCase()}
                     placeholder="Email Address"
                     textContentType="emailAddress"
                 />
@@ -66,7 +81,7 @@ export default function SignIn({ navigation }) {
                         <Text style={styles.signInText}>{status.length > 0 ? status : 'Sign in'}</Text>
                     </TouchableOpacity>
                     <Text style={styles.signup}>Not a user? Please
-                        <Text style={styles.signupLink} onPress={() => { navigation.navigate('Sign Up') }}> Sign up </Text>
+                        <Text style={styles.signupLink} onPress={() => { props.navigation.navigate('Sign Up') }}> Sign up </Text>
                     </Text>
                 </View >
             </View>

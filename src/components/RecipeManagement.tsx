@@ -3,7 +3,7 @@ import { StyleSheet, SafeAreaView, Text, View } from 'react-native';
 import Header from './Header';
 import commonStyles from "../styles/common";
 
-export default function RecipeManagement({ navigation }) {
+export default function RecipeManagement() {
 
     return (
         <SafeAreaView style={commonStyles.container}>

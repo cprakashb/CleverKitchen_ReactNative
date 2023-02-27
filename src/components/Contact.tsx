@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, TextInput, SafeAreaView, TouchableOpacity, Text, View, Alert } from 'react-native';
 import Header from './Header';
 
-const Contact = ( props)=> {
-       const {navigation} = props;
+const Contact = (props: { navigation: any }) => {
     const [emailAddress, setEmailAddress] = useState("");
     const [query, setQuery] = useState("");
 
@@ -33,7 +32,7 @@ const Contact = ( props)=> {
                 <View style={styles.buttonContainer} >
                     <TouchableOpacity style={styles.button} onPress={() => {
                         if (emailAddress.length > 0 && query.length > 0) {
-                            navigation.navigate("Query",{emailQuery:emailAddress,messageQuery:query})
+                            props.navigation.navigate("Query", { emailQuery: emailAddress, messageQuery: query })
                         } else {
                             Alert.alert("Oops!!", "Please fill in the required details")
                         }

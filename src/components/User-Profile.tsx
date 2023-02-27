@@ -7,25 +7,29 @@ import {
     SafeAreaView,
     Alert
 } from 'react-native';
+import { useAppData } from '../providers/AppState';
 import Header from './Header';
+import auth from '@react-native-firebase/auth';
 
-export default function Profile({ navigation }) {
+
+export default function Profile(props: { navigation: any }): JSX.Element {
+    const { activeUser } = useAppData();
 
     return (
         <SafeAreaView style={styles.container}>
             <Header />
             <View style={styles.bodyContainer}>
                 <View style={styles.avatarContainer} >
-                    <Image style={styles.avatar} source={{ uri: 'https://bootdey.com/img/Content/avatar/avatar6.png' }} />
+                    <Image style={styles.avatar} source={{ uri: activeUser.avatarUrl }} />
                 </View>
                 <View style={styles.buttonContainer} >
                     <View style={styles.button}>
-                        <Text style={styles.text}>Chandra Prakash</Text>
+                        <Text style={styles.text}>{`${activeUser.firstName} ${activeUser.lastName}`}</Text>
                     </View>
                 </View >
                 <View style={styles.buttonContainer} >
                     <View style={styles.button}>
-                        <Text style={styles.text}>chandraprakashb15@gmail.com</Text>
+                        <Text style={styles.text}>{activeUser.emailId}</Text>
                     </View>
                 </View >
                 <View style={styles.buttonContainer} >
@@ -35,11 +39,18 @@ export default function Profile({ navigation }) {
                             Alert.alert("Please Confirm", `Are you sure?`, [
                                 {
                                     text: "Yes",
-                                    onPress: () => {
-                                        navigation.reset({
-                                            index: 0,
-                                            routes: [{ name: "Landing Page" }]
-                                        })
+                                    onPress: async () => {
+                                        await auth()
+                                            .signOut()
+                                            .then(() => {
+                                                console.log('User signed out!')
+                                                Alert.alert('Successfully logged out!!');
+                                                props.navigation.reset({
+                                                    index: 0,
+                                                    routes: [{ name: "Landing Page" }]
+                                                })
+                                            });
+
                                     }
                                 },
                                 {
@@ -67,10 +78,10 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         height: "100%"
     },
-    avatarContainer:{
-        flex:1,
+    avatarContainer: {
+        flex: 1,
         alignItems: 'center',
-        justifyContent:"center",
+        justifyContent: "center",
     },
     avatar: {
         width: 200,

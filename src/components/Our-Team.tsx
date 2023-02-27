@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, SafeAreaView, Text, View, Image, ScrollView } from 'react-native';
 
-export default function Team({ navigation }) {
+export default function Team()  {
     const teamDetails = [{
         id: 2000535950,
         name: "Chandra Prakash",

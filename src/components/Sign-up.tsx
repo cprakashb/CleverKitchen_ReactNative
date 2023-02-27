@@ -3,7 +3,7 @@ import { StyleSheet, TextInput, SafeAreaView, TouchableOpacity, Text, View, Aler
 import { validateEmail } from '../helpers';
 import { signUpUser } from '../services/api.service';
 
-export default function Signup({ navigation }) {
+export default function Signup(props: { navigation: any }) {
 
   const [emailAddress, setEmailAddress] = useState("");
   const [confirmEmailAddress, setConfirmEmailAddress] = useState("");
@@ -36,11 +36,13 @@ export default function Signup({ navigation }) {
 
     signUpUser(emailAddress, password)
       .then(() => {
+        setStatus('');
         console.log('User account created & signed in!');
         Alert.alert('Success, please login');
-        navigation.goBack();
+        props.navigation.goBack();
       })
       .catch(error => {
+        setStatus('');
         if (error.code === 'auth/email-already-in-use') {
           console.log('Oops!! Email address is already in use!');
         }
@@ -64,14 +66,14 @@ export default function Signup({ navigation }) {
         <TextInput
           style={styles.input}
           onChangeText={setEmailAddress}
-          value={emailAddress}
+          value={emailAddress.toLowerCase()}
           placeholder="Email Address"
           textContentType="emailAddress"
         />
         <TextInput
           style={styles.input}
           onChangeText={setConfirmEmailAddress}
-          value={confirmEmailAddress}
+          value={confirmEmailAddress.toLowerCase()}
           placeholder="Confirm Email Address"
           textContentType="emailAddress"
         />

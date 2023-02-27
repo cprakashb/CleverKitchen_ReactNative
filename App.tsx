@@ -25,7 +25,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const Stack = createNativeStackNavigator();
 
-function App(): JSX.Element {
+function App(){
   AntDesign.loadFont();
   MaterialIcons.loadFont();
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, SafeAreaView, TouchableOpacity, Text, View } from 'react-native';
 
-export default function LandingPage({ navigation }) {
+export default function LandingPage(props:{navigation:any}) {
 
     return (
         <SafeAreaView style={styles.container}>
@@ -11,12 +11,12 @@ export default function LandingPage({ navigation }) {
                 </View>
                 <View style={styles.buttonContainer} >
                     <TouchableOpacity style={[styles.button, styles.boxShadow]} onPress={() => {
-                        navigation.navigate("Sign In")
+                        props.navigation.navigate("Sign In")
                     }}>
                         <Text style={styles.buttonText}>Sign In</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.button, styles.boxShadow]} onPress={() => {
-                        navigation.navigate("Sign Up")
+                        props.navigation.navigate("Sign Up")
                     }}>
                         <Text style={styles.buttonText}>Sign Up</Text>
                     </TouchableOpacity>

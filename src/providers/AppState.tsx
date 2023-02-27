@@ -1,6 +1,6 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {Button, Text, View} from 'react-native';
-import {AppData, User} from '../common/types';
+import React, { useContext, useEffect, useState } from 'react';
+import { Button, Text, View } from 'react-native';
+import { AppData, User } from '../common/types';
 
 export interface AppDataProvider {
   activeUser: User;
@@ -13,7 +13,7 @@ export const useAppData = (): AppDataProvider => {
   return useContext(AppStateContext);
 };
 
-const AppStateProvider = ({children}) => {
+const AppStateProvider = (props: { children: React.ReactFragment | null | undefined }) => {
   const [activeUser, setActiveUser] = useState<User>();
 
   const loginUser = (value: User) => {
@@ -28,7 +28,7 @@ const AppStateProvider = ({children}) => {
         activeUser: activeUser,
         setActiveUser: loginUser,
       }}>
-      {children}
+      {props.children}
     </AppStateContext.Provider>
   );
 };

@@ -10,17 +10,16 @@ export function signInAsync(username: string, password: string) {
   return auth().signInWithEmailAndPassword(username, password);
 }
 
-export async function fetchUser(userId: string): Promise<User | undefined> {
+export async function fetchUser(userDetails: User): Promise<User | undefined> {
   await sleep(2000);
-  //Assumed here a user fetched from DB
-  //... Put code here
-  //Success
-  const avt =
-    'https://gravatar.com/avatar/c804fa4eac7ccd9b835d4cf4552b5140?s=400&d=robohash&r=x';
+  const avtar = 'https://bootdey.com/img/Content/avatar/avatar6.png';
   return {
-    id: userId,
-    firstName: 'Mostafa',
-    lastName: 'Gamal',
-    avatarUrl: avt,
+    id: userDetails.id,
+    firstName: 'Jeevahasan',
+    lastName: 'Mahadevan',
+    avatarUrl: avtar,
+    emailId: userDetails.emailId
   };
 }
+
+
